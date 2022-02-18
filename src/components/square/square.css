@@ -1,0 +1,11 @@
+.square {
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  font-size: 3rem;
+}
