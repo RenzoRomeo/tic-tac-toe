@@ -41,6 +41,11 @@ function App() {
       window.location.href = '/';
     });
 
+    ioClient.on('otherJoined', (other) => {
+      console.log(other);
+      setOtherUser(other);
+    });
+
     setSocket(ioClient);
   }, []);
 
@@ -48,7 +53,7 @@ function App() {
     <div className="App">
       <div className="main">
         <div className="userId">
-          {otherUser ? `Playing with ${otherUser}` : socket && socket.id}
+          {otherUser !== '' ? `Playing with ${otherUser}` : socket && socket.id}
         </div>
         {!playing ? (
           <div className="winner">
