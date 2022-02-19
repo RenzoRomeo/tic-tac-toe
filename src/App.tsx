@@ -35,6 +35,12 @@ function App() {
         other,
       },
     });
+
+    ioClient.on('error', (message) => {
+      console.log(message);
+      window.location.href = '/';
+    });
+
     setSocket(ioClient);
   }, []);
 
