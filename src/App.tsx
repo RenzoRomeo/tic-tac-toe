@@ -22,10 +22,35 @@ function App() {
   const [loses, setLoses] = useState<number>(0);
   const [history, setHistory] = useState<players[]>([]);
 
+  const [currentPlayer, setCurrentPlayer] = useState<players>(players.X);
+  const [turn, setTurn] = useState<boolean>(true);
+
+  const [squares, setSquares] = useState<players[]>(
+    Array(9).fill(players.none)
+  );
+
   const handleFinishGame = (winner: players) => {
     setPlaying(false);
     setHistory([winner, ...history]);
+    socket?.emit('finishedGame', winner === currentPlayer);
   };
+
+  const otherPlayer = () =>
+    currentPlayer === players.X ? players.O : players.X;
+
+  const handleNewMove = (i: number) => {
+    if (playing && squares[i] === players.none) {
+      const newSquares = squares.map((square, j) =>
+        j === i ? currentPlayer : square
+      );
+      setSquares(newSquares);
+      socket?.emit('newMove', { otherUser, newSquares });
+    }
+  };
+
+  useEffect(() => {
+    if (playing) setSquares(Array(9).fill(players.none));
+  }, [playing]);
 
   useEffect(() => {
     const other = window.location.pathname.substring(1);
@@ -42,8 +67,19 @@ function App() {
     });
 
     ioClient.on('otherJoined', (other) => {
-      console.log(other);
       setOtherUser(other);
+      setTurn(true);
+      setCurrentPlayer(players.X);
+    });
+
+    ioClient.on('youJoined', (other) => {
+      setOtherUser(other);
+      setTurn(false);
+      setCurrentPlayer(players.O);
+    });
+
+    ioClient.on('getMove', (newSquares: players[]) => {
+      setSquares(newSquares);
     });
 
     setSocket(ioClient);
@@ -52,6 +88,7 @@ function App() {
   return (
     <div className="App">
       <div className="main">
+        <p>{turn ? 'you play' : 'other plays'}</p>
         <div className="userId">
           {otherUser !== '' ? `Playing with ${otherUser}` : socket && socket.id}
         </div>
@@ -66,18 +103,15 @@ function App() {
         ) : (
           <div className="winner-placeholder">Playing...</div>
         )}
-        <Board playing={playing} handleFinishGame={handleFinishGame} />
+        <Board
+          squares={squares}
+          handleFinishGame={handleFinishGame}
+          handleNewMove={handleNewMove}
+        />
         <div className="scores">
           <div className="wins">{wins}</div>
           <div className="draws">{draws}</div>
           <div className="loses">{loses}</div>
-        </div>
-
-        <div
-          className={playing ? 'playing' : 'reset'}
-          onClick={() => setPlaying(true)}
-        >
-          {playing ? 'PLAYING' : 'RESET'}
         </div>
       </div>
     </div>

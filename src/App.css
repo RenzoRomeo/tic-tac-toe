@@ -44,20 +44,6 @@ body {
   margin-top: 3rem;
 }
 
-.playing,
-.reset {
-  cursor: pointer;
-  background-color: red;
-  text-align: center;
-  font-size: 3rem;
-  margin: 2rem 0;
-  padding: 1rem;
-}
-
-.playing {
-  background-color: green;
-}
-
 .wins {
   color: green;
 }

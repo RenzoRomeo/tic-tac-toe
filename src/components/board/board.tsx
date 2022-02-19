@@ -1,29 +1,21 @@
 import './board.css';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Square from '../square/square';
 
 import { players } from '../../App';
 
 interface Props {
-  playing: boolean;
+  squares: players[];
   handleFinishGame: (winner: players) => void;
+  handleNewMove: (index: number) => void;
 }
 
-const Board: React.FC<Props> = ({ playing, handleFinishGame }) => {
-  const [squares, setSquares] = useState<players[]>(
-    Array(9).fill(players.none)
-  );
-  const [currentPlayer, setCurrentPlayer] = useState<players>(players.X);
-
-  const handleClick = (i: number) => {
-    if (playing && squares[i] === players.none) {
-      setSquares(
-        squares.map((square, j) => (j === i ? currentPlayer : square))
-      );
-      setCurrentPlayer(currentPlayer === players.X ? players.O : players.X);
-    }
-  };
+const Board: React.FC<Props> = ({
+  squares,
+  handleFinishGame,
+  handleNewMove,
+}) => {
 
   const check = () => {
     const winnerIndexes = [
@@ -52,16 +44,12 @@ const Board: React.FC<Props> = ({ playing, handleFinishGame }) => {
     check();
   }, [squares]);
 
-  useEffect(() => {
-    if (playing) setSquares(Array(9).fill(players.none));
-  }, [playing]);
-
   return (
     <div className="board">
       {squares.map((square, i) => (
         <Square
           key={i}
-          handler={() => handleClick(i)}
+          handler={() => handleNewMove(i)}
           player={
             square === players.none ? '' : square === players.X ? 'X' : 'O'
           }
