@@ -1,7 +1,8 @@
 import './App.css';
 
 import { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 
 import Board from './components/board/board';
 
@@ -13,11 +14,12 @@ export enum players {
 
 function App() {
   const [socket, setSocket] = useState<Socket>();
+  const [otherUser, setOtherUser] = useState<string>('');
+
   const [playing, setPlaying] = useState<boolean>(true);
   const [wins, setWins] = useState<number>(0);
   const [draws, setDraws] = useState<number>(0);
   const [loses, setLoses] = useState<number>(0);
-
   const [history, setHistory] = useState<players[]>([]);
 
   const handleFinishGame = (winner: players) => {
@@ -26,18 +28,22 @@ function App() {
   };
 
   useEffect(() => {
-    setSocket(
-      io('http://localhost:8000', {
-        query: {
-          message: 'test',
-        },
-      })
-    );
+    const other = window.location.pathname.substring(1);
+    setOtherUser(other);
+    const ioClient = io('http://localhost:8000', {
+      query: {
+        other,
+      },
+    });
+    setSocket(ioClient);
   }, []);
 
   return (
     <div className="App">
       <div className="main">
+        <div className="userId">
+          {otherUser ? `Playing with ${otherUser}` : socket && socket.id}
+        </div>
         {!playing ? (
           <div className="winner">
             {history[0] === players.none
