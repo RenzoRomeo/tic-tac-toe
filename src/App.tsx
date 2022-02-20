@@ -156,7 +156,7 @@ function App() {
             {clipboard.copied ? 'Copied' : 'Share this link'}
           </Button>
         ) : (
-          <Center>
+          <Center py="0.5rem">
             <Spinner />
           </Center>
         )}
