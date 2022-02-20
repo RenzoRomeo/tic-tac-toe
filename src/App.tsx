@@ -139,6 +139,7 @@ function App() {
           </Box>
         ) : (
           <Button
+            color="white"
             bg={clipboard.copied ? 'green.500' : 'blackAlpha.500'}
             onClick={() => clipboard.copy(currentUser)}
           >
