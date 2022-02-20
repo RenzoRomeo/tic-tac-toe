@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
 import { Center, Flex, Text, Box, Button } from '@chakra-ui/react';
 import { useClipboard } from '@mantine/hooks';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import Board from './components/board';
 
@@ -71,7 +71,7 @@ function App() {
   useEffect(() => {
     const other = window.location.pathname.substring(1);
     setOtherUser(other);
-    const ioClient = io('http://localhost:8000', {
+    const ioClient = io('https://tic-tac-toe-backend-renzo.herokuapp.com/', {
       query: {
         other,
       },
