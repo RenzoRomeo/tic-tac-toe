@@ -104,13 +104,15 @@ function App() {
   return (
     <div className="App">
       <div className="main">
-        <p>{turn ? 'you play' : 'other plays'}</p>
+        <p>{otherUser && (turn ? 'you play' : 'other plays')}</p>
         <div className="userId">
-          {otherUser !== '' ? `Playing with ${otherUser}` : currentUser}
+          {otherUser ? `Playing with ${otherUser}` : `Your id: ${currentUser}`}
         </div>
         {!playing ? (
           <div className="winner">
-            {history[0] === players.none
+            {!history.length
+              ? ''
+              : history[0] === players.none
               ? 'Draw'
               : history[0] === players.X
               ? 'X wins'
