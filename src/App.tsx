@@ -14,6 +14,7 @@ export enum players {
 
 function App() {
   const [socket, setSocket] = useState<Socket>();
+  const [currentUser, setCurrentUser] = useState<string>('');
   const [otherUser, setOtherUser] = useState<string>('');
 
   const [playing, setPlaying] = useState<boolean>(true);
@@ -34,9 +35,6 @@ function App() {
     setHistory([winner, ...history]);
     socket?.emit('finishedGame', winner === currentPlayer);
   };
-
-  const otherPlayer = () =>
-    currentPlayer === players.X ? players.O : players.X;
 
   const handleNewMove = (i: number) => {
     if (playing && squares[i] === players.none) {
@@ -82,6 +80,10 @@ function App() {
       setSquares(newSquares);
     });
 
+    ioClient.on('connect', () => {
+      setCurrentUser(ioClient.id);
+    });
+
     setSocket(ioClient);
   }, []);
 
@@ -90,7 +92,7 @@ function App() {
       <div className="main">
         <p>{turn ? 'you play' : 'other plays'}</p>
         <div className="userId">
-          {otherUser !== '' ? `Playing with ${otherUser}` : socket && socket.id}
+          {otherUser !== '' ? `Playing with ${otherUser}` : currentUser}
         </div>
         {!playing ? (
           <div className="winner">
