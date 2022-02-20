@@ -37,6 +37,10 @@ function App() {
     Array(9).fill(players.none)
   );
 
+  const newGame = () => {
+    console.log('new game');
+  };
+
   const handleFinishGame = (winner: players) => {
     setPlaying(false);
     setHistory([winner, ...history]);
@@ -51,6 +55,7 @@ function App() {
         setLoses(loses + 1);
     }
     socket?.emit('finishedGame', otherUser);
+    newGame();
   };
 
   const handleNewMove = (i: number) => {
@@ -108,6 +113,8 @@ function App() {
     ioClient.on('reset', () => {
       window.location.href = '/';
     });
+
+    ioClient.on('newGame', newGame);
 
     setSocket(ioClient);
   }, []);
