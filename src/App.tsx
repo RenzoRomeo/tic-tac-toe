@@ -55,7 +55,6 @@ function App() {
         setLoses(loses + 1);
     }
     socket?.emit('finishedGame', otherUser);
-    newGame();
   };
 
   const handleNewMove = (i: number) => {
