@@ -3,7 +3,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
-import { Center, Flex, Text, Box } from '@chakra-ui/react';
+import { Center, Flex, Text, Box, Button } from '@chakra-ui/react';
+import { useClipboard } from '@mantine/hooks';
 
 import Board from './components/board';
 
@@ -26,6 +27,8 @@ function App() {
 
   const [currentPlayer, setCurrentPlayer] = useState<players>(players.X);
   const [turn, setTurn] = useState<boolean>(true);
+
+  const clipboard = useClipboard({ timeout: 500 });
 
   const [squares, setSquares] = useState<players[]>(
     Array(9).fill(players.none)
@@ -109,21 +112,36 @@ function App() {
   return (
     <Center w="100vw" h="100vh">
       <Flex direction="column" maxW="90%">
-        <Box
-          fontSize={{ base: '1.5rem', sm: '1.5rem' }}
-          p="1rem"
-          bg="blackAlpha.500"
-          borderRadius="10px"
-        >
-          {otherUser && (
-            <Text align="center">{turn ? 'you play' : 'other plays'}</Text>
-          )}
-          <Text align="center">
-            {otherUser
-              ? `Playing with ${otherUser}`
-              : `Your id: ${currentUser}`}
-          </Text>
-        </Box>
+        {otherUser ? (
+          <Box
+            fontSize={{ base: '1.5rem', sm: '1.5rem' }}
+            p="1rem"
+            bg="blackAlpha.500"
+            borderRadius="10px"
+            justifyContent="center"
+          >
+            <Text align="center">
+              {!playing
+                ? `${
+                    history[0] === players.none
+                      ? 'Draw'
+                      : history[0] === players.X
+                      ? 'X Wins!'
+                      : 'O Wins!'
+                  }`
+                : turn
+                ? 'Your Turn!'
+                : 'Waiting...'}
+            </Text>
+          </Box>
+        ) : (
+          <Button
+            bg={clipboard.copied ? 'green.500' : 'blackAlpha.500'}
+            onClick={() => clipboard.copy(currentUser)}
+          >
+            {clipboard.copied ? 'Copied' : 'Share this link'}
+          </Button>
+        )}
 
         <Board
           squares={squares}
