@@ -33,7 +33,17 @@ function App() {
   const handleFinishGame = (winner: players) => {
     setPlaying(false);
     setHistory([winner, ...history]);
-    socket?.emit('finishedGame', winner === currentPlayer);
+    switch (winner) {
+      case players.none:
+        setDraws(draws + 1);
+        break;
+      case currentPlayer:
+        setWins(wins + 1);
+        break;
+      default:
+        setLoses(loses + 1);
+    }
+    socket?.emit('finishedGame', otherUser);
   };
 
   const handleNewMove = (i: number) => {
