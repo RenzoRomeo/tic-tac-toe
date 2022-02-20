@@ -3,7 +3,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
-import { Center, Flex, Text, Box, Button } from '@chakra-ui/react';
+import { Center, Flex, Text, Box, Button, Spinner } from '@chakra-ui/react';
 import { useClipboard } from '@mantine/hooks';
 import { motion } from 'framer-motion';
 
@@ -146,7 +146,7 @@ function App() {
                 : 'Waiting...'}
             </Text>
           </Box>
-        ) : (
+        ) : currentUser ? (
           <Button
             bg={clipboard.copied ? 'green.500' : 'blackAlpha.500'}
             onClick={() =>
@@ -155,6 +155,10 @@ function App() {
           >
             {clipboard.copied ? 'Copied' : 'Share this link'}
           </Button>
+        ) : (
+          <Center>
+            <Spinner />
+          </Center>
         )}
 
         <Board
