@@ -1,11 +1,10 @@
-import './board.css';
-
 import { useEffect } from 'react';
-import Square from '../square/square';
+import Square from './square';
+import { BoxProps, SimpleGrid } from '@chakra-ui/react';
 
-import { players } from '../../App';
+import { players } from '../App';
 
-interface Props {
+interface Props extends BoxProps {
   squares: players[];
   handleFinishGame: (winner: players) => void;
   handleNewMove: (index: number) => void;
@@ -15,8 +14,8 @@ const Board: React.FC<Props> = ({
   squares,
   handleFinishGame,
   handleNewMove,
+  ...props
 }) => {
-
   const check = () => {
     const winnerIndexes = [
       [0, 1, 2],
@@ -45,7 +44,7 @@ const Board: React.FC<Props> = ({
   }, [squares]);
 
   return (
-    <div className="board">
+    <SimpleGrid columns={3} spacing="1.5rem" p="0.5rem" {...props}>
       {squares.map((square, i) => (
         <Square
           key={i}
@@ -55,7 +54,7 @@ const Board: React.FC<Props> = ({
           }
         />
       ))}
-    </div>
+    </SimpleGrid>
   );
 };
 
