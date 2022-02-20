@@ -141,7 +141,9 @@ function App() {
           <Button
             color="white"
             bg={clipboard.copied ? 'green.500' : 'blackAlpha.500'}
-            onClick={() => clipboard.copy(currentUser)}
+            onClick={() =>
+              clipboard.copy(`${window.location.origin}/${currentUser}`)
+            }
           >
             {clipboard.copied ? 'Copied' : 'Share this link'}
           </Button>
