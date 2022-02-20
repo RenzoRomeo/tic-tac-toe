@@ -113,7 +113,7 @@ function App() {
   }, []);
 
   return (
-    <Center w="100vw" h="100vh" bg="#212529">
+    <Center w="100vw" h="100vh" bg="#212529" color="white">
       <Flex direction="column" maxW="90%">
         {otherUser ? (
           <Box
@@ -139,7 +139,6 @@ function App() {
           </Box>
         ) : (
           <Button
-            color="white"
             bg={clipboard.copied ? 'green.500' : 'blackAlpha.500'}
             onClick={() =>
               clipboard.copy(`${window.location.origin}/${currentUser}`)
