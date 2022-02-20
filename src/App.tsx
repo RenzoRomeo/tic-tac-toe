@@ -39,6 +39,10 @@ function App() {
 
   const newGame = () => {
     console.log('new game');
+    setTimeout(() => {
+      setSquares([]);
+      setPlaying(true);
+    }, 3000);
   };
 
   const handleFinishGame = (winner: players) => {
