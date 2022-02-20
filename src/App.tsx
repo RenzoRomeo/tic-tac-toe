@@ -17,7 +17,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState<string>('');
   const [otherUser, setOtherUser] = useState<string>('');
 
-  const [playing, setPlaying] = useState<boolean>(true);
+  const [playing, setPlaying] = useState<boolean>(false);
   const [wins, setWins] = useState<number>(0);
   const [draws, setDraws] = useState<number>(0);
   const [loses, setLoses] = useState<number>(0);
@@ -37,11 +37,12 @@ function App() {
   };
 
   const handleNewMove = (i: number) => {
-    if (playing && squares[i] === players.none) {
+    if (playing && turn && squares[i] === players.none) {
       const newSquares = squares.map((square, j) =>
         j === i ? currentPlayer : square
       );
       setSquares(newSquares);
+      setTurn(false);
       socket?.emit('newMove', { otherUser, newSquares });
     }
   };
@@ -68,16 +69,19 @@ function App() {
       setOtherUser(other);
       setTurn(true);
       setCurrentPlayer(players.X);
+      setPlaying(true);
     });
 
     ioClient.on('youJoined', (other) => {
       setOtherUser(other);
-      setTurn(false);
       setCurrentPlayer(players.O);
+      setPlaying(true);
+      setTurn(false);
     });
 
     ioClient.on('getMove', (newSquares: players[]) => {
       setSquares(newSquares);
+      setTurn(true);
     });
 
     ioClient.on('connect', () => {
