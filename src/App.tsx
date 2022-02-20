@@ -40,7 +40,7 @@ function App() {
   const newGame = () => {
     console.log('new game');
     setTimeout(() => {
-      setSquares([]);
+      setSquares(Array(9).fill(players.none));
       setPlaying(true);
     }, 3000);
   };
