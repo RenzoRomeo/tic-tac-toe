@@ -5,8 +5,11 @@ import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
 import { Center, Flex, Text, Box, Button } from '@chakra-ui/react';
 import { useClipboard } from '@mantine/hooks';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import Board from './components/board';
+
+const MotionText = motion(Text);
 
 export enum players {
   X = 1,
@@ -110,11 +113,11 @@ function App() {
   }, []);
 
   return (
-    <Center w="100vw" h="100vh">
+    <Center w="100vw" h="100vh" bg="#212529">
       <Flex direction="column" maxW="90%">
         {otherUser ? (
           <Box
-            fontSize={{ base: '1.5rem', sm: '1.5rem' }}
+            fontSize="1.5rem"
             p="1rem"
             bg="blackAlpha.500"
             borderRadius="10px"
@@ -158,9 +161,15 @@ function App() {
           pb="0"
           fontSize="4rem"
         >
-          <Text color="green.500">{wins}</Text>
-          <Text color="yellow.500">{draws}</Text>
-          <Text color="red.500">{loses}</Text>
+          {[wins, draws, loses].map((x, i) => (
+            <MotionText
+              whileHover={{ scale: 1.2 }}
+              color={i === 0 ? 'green.500' : i === 1 ? 'yellow.500' : 'red.500'}
+              cursor="default"
+            >
+              {x}
+            </MotionText>
+          ))}
         </Flex>
       </Flex>
     </Center>
