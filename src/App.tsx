@@ -38,7 +38,6 @@ function App() {
   );
 
   const newGame = () => {
-    console.log('new game');
     setTimeout(() => {
       setSquares(Array(9).fill(players.none));
       setPlaying(true);
