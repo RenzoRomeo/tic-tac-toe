@@ -78,7 +78,7 @@ function App() {
   useEffect(() => {
     const other = window.location.pathname.substring(1);
     setOtherUser(other);
-    const ioClient = io('https://tic-tac-toe-backend-renzo.herokuapp.com/', {
+    const ioClient = io(import.meta.env.VITE_BACKEND_ENDPOINT, {
       query: {
         other,
       },
